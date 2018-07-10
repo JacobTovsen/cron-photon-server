@@ -14,14 +14,10 @@ function pingPhoton() {
         .then((response) => {
             console.log(response.data.result);
             let str = response.data.result;
-            res = str.substr(15, 4);
-            let device_id = 1;
+            temp = str.substr(15, 4);
             let date = response.data.coreInfo.last_heard;
-            console.log(res);
             let queryText = `INSERT INTO "sensor_data" (device_id, date, temperature)
-            VALUES('1', '${date}', '${res}')`;
-            // pool.query(queryText)
+            VALUES('1', '${date}', '${temp}')`;
             pool.query(queryText)
-            
         })
 }
