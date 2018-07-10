@@ -2,8 +2,6 @@ const cron = require('node-cron');
 const axios = require('axios');
 const pool = require('./pool');
 
-
-
 cron.schedule('*/10 * * * *', function(){
     console.log('running a task every minute');
     pingPhoton();
