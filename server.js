@@ -2,7 +2,7 @@ const cron = require('node-cron');
 const axios = require('axios');
 const pool = require('./pool');
 
-cron.schedule('*/10 * * * *', function(){
+cron.schedule('* * * * *', function(){
     console.log('running a task every minute');
     pingPhoton();
 });
@@ -22,5 +22,24 @@ function pingPhoton() {
                 date,
                 temp
             ])
-        })
+    })
+    axios.get('http://api.openweathermap.org/data/2.5/weather?id=5037649&units=imperial&APPID=31e881ff6dae59b4d6b5d23f68d7d652')
+        .then((response) => {
+            console.log(response.data);
+            console.log('this is temp:', response.data.main.temp);
+            let api = "openweathermap";
+            let temperature = parseInt(response.data.main.temp);
+            let dateStamp = new Date().toJSON().toString();
+            let queryText = `INSERT INTO "weather_api" (api, date, temperature)
+            VALUES( $1, $2, $3)`;
+            pool.query(queryText, [
+                api,
+                dateStamp,
+                temperature
+            ])
+
+            }).catch((error) => {
+                console.log('problem in weather api GET');
+            })
+
 }
